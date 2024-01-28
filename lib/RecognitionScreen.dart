@@ -100,35 +100,49 @@ class _HomePageState extends State<RecognitionScreen> {
     recognitions.clear();
     for (Face face in faces) {
       Rect faceRect = face.boundingBox;
-      num left = faceRect.left<0?0:faceRect.left;
-      num top = faceRect.top<0?0:faceRect.top;
-      num right = faceRect.right>image.width?image.width-1:faceRect.right;
-      num bottom = faceRect.bottom>image.height?image.height-1:faceRect.bottom;
+      num left = faceRect.left < 0 ? 0 : faceRect.left;
+      num top = faceRect.top < 0 ? 0 : faceRect.top;
+      num right = faceRect.right > image.width ? image.width - 1 : faceRect
+          .right;
+      num bottom = faceRect.bottom > image.height ? image.height - 1 : faceRect
+          .bottom;
       num width = right - left;
       num height = bottom - top;
 
       //TODO crop face
       File cropedFace = await FlutterNativeImage.cropImage(
           _image!.path,
-          left.toInt(),top.toInt(),width.toInt(),height.toInt());
+          left.toInt(), top.toInt(), width.toInt(), height.toInt());
       final bytes = await File(cropedFace!.path).readAsBytes();
       final img.Image? faceImg = img.decodeImage(bytes);
-      Recognition recognition = _recognizer.recognize(faceImg!, face.boundingBox);
-      if(recognition.distance>1) {
+      Recognition recognition = _recognizer.recognize(
+          faceImg!, face.boundingBox);
+      if (recognition.distance > 1) {
         recognition.name = "Unknown";
       }
       recognitions.add(recognition);
-      showDialog(context: context, builder: (context)=>AlertDialog(
-        content: Text("Proceed for Attendance now!!!"),
-        actions: [
-          TextButton(onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ActualAttendanceMarking()),
-            );
-          }, child: Text('Ok'))
-        ],
-      ));
+      if (recognition.name != 'Unknown') {
+        showDialog(context: context, builder: (context) =>
+            AlertDialog(
+              content: Text("Proceed for Attendance now!!!"),
+              actions: [
+                TextButton(onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ActualAttendanceMarking()),
+                  );
+                }, child: Text('Ok'))
+              ],
+            ));
+      }
+      else{
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Face not Recognized...Try Again....'),
+          ),
+        );
+      }
     }
     drawRectangleAroundFaces();
   }

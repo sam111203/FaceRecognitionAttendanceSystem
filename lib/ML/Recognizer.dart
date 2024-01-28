@@ -37,6 +37,7 @@ class Recognizer {
     if (numThreads != null) {
       _interpreterOptions.threads = numThreads;
     }
+
     loadModel();
   }
 

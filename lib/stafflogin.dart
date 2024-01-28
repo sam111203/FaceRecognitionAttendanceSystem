@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gsheets/gsheets.dart';
-import 'homepage.dart';
-import 'signup.dart';
-import 'stafflogin.dart';
+import 'StaffHomepage.dart';
+import 'staffsignup.dart';
 
-void main() => runApp(const MyApp());
+void main() => runApp(const StaffSignup());
 
-class Login extends StatelessWidget {
-  const Login({Key? key}) : super(key: key);
-
+class StaffLogin extends StatelessWidget {
+  const StaffLogin({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -42,7 +40,7 @@ class UserSheetsApi{
   "universe_domain": "googleapis.com"
 }
   ''';
-  static final _spreadsheetId = '1OwiWJJ9PR-18gCIPn30XVWdBzPoRg7Chjetn7mfqtvs';
+  static final _spreadsheetId = '1sSsTsbVrkN6ho12diucExIEl8j-gwd_3Z0FqqJUONT0';
   static final _gsheets = GSheets(_credentials);
   static Worksheet? _userSheet;
   static Future init() async{
@@ -59,7 +57,7 @@ class UserSheetsApi{
   static Future <Worksheet> _getWorkSheet(
       Spreadsheet spreadsheet,{
         required String title,
-  }
+      }
       )async{
     try{
       return await spreadsheet.addWorksheet(title);
@@ -68,9 +66,9 @@ class UserSheetsApi{
     }
   }
   static Future insert(List<Map<String, dynamic>> rowList) async{
-   if(_userSheet == null) return;
+    if(_userSheet == null) return;
 
-     _userSheet!.values.map.appendRows(rowList);
+    _userSheet!.values.map.appendRows(rowList);
   }
 
 }
@@ -106,7 +104,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                       fontSize: 30),
                 )),
             Icon(
-              Icons.person,
+              Icons.person_outline,
               color: Colors.blue,
               size: 70.0,
             ),
@@ -156,86 +154,65 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 height: 100,
                 padding: const EdgeInsets.only(top: 30, left: 110, right: 110),
                 child: ElevatedButton(
-                  child: const Text('Login',style: TextStyle(fontSize: 25),),
-                  style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50.0),
-                          )
-                      )
-                  ),
+                    child: const Text('Login',style: TextStyle(fontSize: 25),),
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50.0),
+                            )
+                        )
+                    ),
 
-                  onPressed: () async{
-                    //final _spreadsheetId = '1OwiWJJ9PR-18gCIPn30XVWdBzPoRg7Chjetn7mfqtvs';
-                    //final range = 'Sheet1!A:A';
-                    final user = {
-                      UserFields.GSUITE_ID: nameController.text,
-                      UserFields.Password: passwordController.text,
-                      UserFields.LoginTimeStamp: '${DateTime.now()}',
-                    };
-                    await UserSheetsApi.insert([user]);
+                    onPressed: () async{
+                      //final _spreadsheetId = '1OwiWJJ9PR-18gCIPn30XVWdBzPoRg7Chjetn7mfqtvs';
+                      //final range = 'Sheet1!A:A';
+                      final user = {
+                        UserFields.GSUITE_ID: nameController.text,
+                        UserFields.Password: passwordController.text,
+                        UserFields.LoginTimeStamp: '${DateTime.now()}',
+                      };
+                      await UserSheetsApi.insert([user]);
 
-                    print(nameController.text);
-                    print(passwordController.text);
-                    print(DateTime.now());
+                      print(nameController.text);
+                      print(passwordController.text);
+                      print(DateTime.now());
 
-                    setState(() {
-                      nameController.text.isEmpty ? _validate_name = true : _validate_name = false;
-                      passwordController.text.isEmpty ? _validate_password = true : _validate_password = false;
+                      setState(() {
+                        nameController.text.isEmpty ? _validate_name = true : _validate_name = false;
+                        passwordController.text.isEmpty ? _validate_password = true : _validate_password = false;
 
 
-                    });
-                    if(_validate_name!=true && _validate_password!=true){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const HomePage()),
-                      );
-                    }
+                      });
+                      if(_validate_name!=true && _validate_password!=true){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const StaffHomePage()),
+                        );
+                      }
 
                     }
                 )
             ),
             //Checkbox to be inserted here inside row element
-           // TextButton(
-             // onPressed: () {
-                //forgot password screen
-              //},
-              //child: const Text('Keep me Signed In',style: TextStyle(fontSize: 15),),
+            // TextButton(
+            // onPressed: () {
+            //forgot password screen
+            //},
+            //child: const Text('Keep me Signed In',style: TextStyle(fontSize: 15),),
             //),
-            Column(
-              children: <Widget>[
-                // Row(
-                //   children: <Widget>[
-                //     const Text('Are you a staff?',style: TextStyle(fontSize: 15,),),
-                //     TextButton(
-                //       child: const Text(
-                //         'Staff Login',
-                //         style: TextStyle(fontSize: 15,decoration: TextDecoration.underline,),
-                //       ),
-                //       onPressed: () {
-                //
-                //         Navigator.push(
-                //           context,
-                //           MaterialPageRoute(builder: (context) => const StaffLogin()),
-                //         );
-                //       },
-                //     )
-                //   ],
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                // ),
+
                 Row(
                   children: <Widget>[
-                    const Text('New User?',style: TextStyle(fontSize: 15,),),
+                    const Text('New Staff?',style: TextStyle(fontSize: 15,),),
                     TextButton(
                       child: const Text(
                         'Sign up',
                         style: TextStyle(fontSize: 15,decoration: TextDecoration.underline,),
                       ),
                       onPressed: () {
-
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const MyApp()),
+                          MaterialPageRoute(builder: (context) => const StaffSignup()),
                         );
 
                       },
@@ -245,7 +222,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 ),
               ],
             ),
-          ],
-        ));
+        );
   }
 }

@@ -18,7 +18,7 @@ class UserSheetsApi1{
   "universe_domain": "googleapis.com"
 }
   ''';
-  static final _spreadsheetId = '13TGCvgV0tWPX7E-kFxQGfbzggzDOq0zXE9B63DhVKtg';
+  static final _spreadsheetId = '1A5GpdkZw-E4Bm1yipAUyzQp4dnkkLuzcuHCwhGhwCCk';
   static final _gsheets = GSheets(_credentials);
   static Worksheet? _userSheet1;
   static Future init() async{
@@ -46,38 +46,23 @@ class UserSheetsApi1{
   static Future insert(List<Map<String, dynamic>> rowList) async {
     if (_userSheet1 == null) return;
 
-    //final cell = await _userSheet1?.cells.cell(column: 4, row: 2);
-    // prints 'new'
-    //print(cell?.value);
-
-    var rollNumbers = await _userSheet1?.values.columnByKey('Roll No');
-    final current_rollNo = fourController.text;
-    print(current_rollNo);
-    if (rollNumbers!.contains(current_rollNo)) {
-      print("Duplicate Entries!");
-    }
-    else {
-      print("No repeated roll numbers.");
-      _userSheet1!.values.map.appendRows(rowList);
-      print("Insertion Successful!!");
+    _userSheet1!.values.map.appendRows(rowList);
     }
   }
-    }
 
 
 class UserFields{
   static final String FName= 'First Name';
   static final String MName= 'Middle Name';
   static final String LName= 'Last Name';
-  static final  RNo= 'Roll No';
   static final String GSUITE= 'Username';
   static final String Passkey= 'Password';
 
-  static List<String> getFields() => [FName,MName,LName,RNo,GSUITE,Passkey];
+  static List<String> getFields() => [FName,MName,LName,GSUITE,Passkey];
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class StaffSignup extends StatelessWidget {
+  const StaffSignup({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -99,7 +84,6 @@ class MyStatefulWidget extends StatefulWidget {
 TextEditingController oneController = TextEditingController();
 TextEditingController twoController = TextEditingController();
 TextEditingController threeController = TextEditingController();
-TextEditingController fourController = TextEditingController();
 TextEditingController fiveController = TextEditingController();
 TextEditingController passwordController = TextEditingController();
 
@@ -153,16 +137,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             Container(
               padding:const EdgeInsets.only(top: 20, left:10, right:10),
               child: TextField(
-                controller: fourController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Roll No',
-                ),
-              ),
-            ),
-            Container(
-              padding:const EdgeInsets.only(top: 20, left:10, right:10),
-              child: TextField(
                 controller: fiveController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
@@ -187,29 +161,26 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 height: 80,
                 padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
                 child: ElevatedButton(
-                  child: const Text('Create Account'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue, // Background color
-                  ),
-                  onPressed: () async{
-                   String Gsuite = fiveController.text;
-                   // if(Gsuite.contains('@student.xavier.ac.in')) {
+                    child: const Text('Create Account'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue, // Background color
+                    ),
+                    onPressed: () async{
+                      String Gsuite = fiveController.text;
+                      // if(Gsuite.contains('@student.xavier.ac.in')) {
                       final user = {
                         UserFields.FName: oneController.text,
                         UserFields.MName: twoController.text,
                         UserFields.LName: threeController.text,
-                        UserFields.RNo: fourController.text,
                         UserFields.GSUITE: fiveController.text,
                         UserFields.Passkey: passwordController.text,
 
-                     };
+                      };
 
                       await UserSheetsApi1.insert([user]);
-                      Navigator.push(context,MaterialPageRoute(builder: (context) =>Login()));
                       print(oneController.text);
                       print(twoController.text);
                       print(threeController.text);
-                      print(fourController.text);
                       print(fiveController.text);
                       print(passwordController.text);
                     }
@@ -223,16 +194,15 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 ),
                 Container(
                   padding: const EdgeInsets.only(top: 20, left: 1, right: 10),
-                    child: InkWell(child: GestureDetector(
-                      child: Text('LOGIN',style: TextStyle(fontWeight: FontWeight.w900,color: Colors.blue),),
-                      onTap: (){
+                  child: InkWell(child: GestureDetector(
+                    child: Text('LOGIN',style: TextStyle(fontWeight: FontWeight.w900,color: Colors.blue),),
+                    onTap: (){
 
-                        Navigator.push(context,MaterialPageRoute(builder: (context) =>Login()));
-                        //print('Heyy! I am Login and I was Clicked!!');
-                      },
+                      Navigator.push(context,MaterialPageRoute(builder: (context) =>Login()));
+                    },
 
-                    ),
-                    ),
+                  ),
+                  ),
                 ),
 
               ],

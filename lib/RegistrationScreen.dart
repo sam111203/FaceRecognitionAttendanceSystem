@@ -1,14 +1,13 @@
 import 'dart:io';
 import 'HomeScreen.dart';
 import 'ML/Recognition.dart';
-import 'homepage.dart';
+import 'main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
 import 'ML/Recognizer.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
@@ -91,6 +90,7 @@ class _HomePageState extends State<RegistrationScreen> {
     return await File(_image!.path).writeAsBytes(img.encodeJpg(orientedImage));
   }
 
+  //TODO perform Face Recognition
   performFaceRecognition() async {
     image = await _image?.readAsBytes();
     image = await decodeImageFromList(image);
@@ -118,7 +118,7 @@ class _HomePageState extends State<RegistrationScreen> {
     }
     drawRectangleAroundFaces();
   }
-  String imageUrl = '';
+
   //TODO Face Registration Dialogue
   showFaceRegistrationDialogue(File cropedFace, Recognition recognition){
     showDialog(
@@ -145,38 +145,15 @@ class _HomePageState extends State<RegistrationScreen> {
               ),
               const SizedBox(height: 10,),
               ElevatedButton(
-                  onPressed: () async {
+                  onPressed: () {
                     HomeScreen.registered.putIfAbsent(
                         textEditingController.text, () => recognition);
                     textEditingController.text = "";
                     Navigator.pop(context);
-                    final Reference referenceRoot = FirebaseStorage.instance.ref();
-                    final Reference referenceDirUsers = referenceRoot.child('Users');
-                    try {
-                      final String fileName = 'Sam Saji'; // Change the filename as needed
-                      final Reference referenceImageToUpload = referenceDirUsers
-                          .child(fileName);
-
-                      final UploadTask task = referenceImageToUpload.putFile(
-                        cropedFace,
-                        SettableMetadata(contentType: 'image/png'),);
-                      final TaskSnapshot snapshot = await task
-                          .whenComplete(() {});
-
-                      imageUrl = await snapshot.ref.getDownloadURL();
-                    }
-                    catch(e){
-
-                    }
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text("Face Registered"),
                     ));
-                    Future.delayed(Duration(seconds: 3), () { //Goes to next screen only after snackbar is shown!!
-                      // Navigate to the next screen after 3 seconds
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-                    });
-
-                  },style: ElevatedButton.styleFrom(backgroundColor: Colors.blue,minimumSize: const Size(200,40)),
+                  },style: ElevatedButton.styleFrom(primary:Colors.blue,minimumSize: const Size(200,40)),
                   child: const Text("Register"))
             ],
 

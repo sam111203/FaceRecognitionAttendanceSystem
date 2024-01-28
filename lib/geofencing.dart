@@ -23,8 +23,8 @@ class _GeolocationAppState extends State<GeolocationApp> {
   late LocationPermission permission;
   var time;
 
-  double startLatitude = 19.1222741;//for xie
-  double startLongitude = 72.9172621;//for xie
+  double startLatitude = 19.0450936;//for xie
+  double startLongitude = 72.8419759;//for xie
   double? distanceInMeter = 0.0;
   Future<Position> _getCurrentLocation() async{
     servicePermission = await Geolocator.isLocationServiceEnabled();
@@ -45,7 +45,7 @@ class _GeolocationAppState extends State<GeolocationApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Get My Location'),
+          title: Text('My Location'),
           centerTitle: true,
         ),
         body: Center(
@@ -66,7 +66,7 @@ class _GeolocationAppState extends State<GeolocationApp> {
                 _currentLocation = await _getCurrentLocation();
                 distanceInMeter = await Geolocator.distanceBetween(startLatitude, startLongitude,  _currentLocation!.latitude, _currentLocation!.longitude);
                 print(distanceInMeter);
-                if(distanceInMeter!<=40){
+                if(distanceInMeter!<=100){
                   print("You are inside the radius");
                  Navigator.push(
                   context,

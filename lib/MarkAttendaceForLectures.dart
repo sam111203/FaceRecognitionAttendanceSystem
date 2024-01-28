@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:core';
 import 'package:gsheets/gsheets.dart';
-
+import 'homepage.dart';
 class ActualAttendanceMarking extends StatefulWidget {
   const ActualAttendanceMarking({super.key});
   @override
@@ -58,14 +58,17 @@ class UserSheetsApi2{
 class UserFields{
   static final String Date = 'Date';
   static final String Name = 'Name';
-  static final String A845 = 'A845';
-  static final String A945 = 'A945';
+  static final String A900 = 'A900';
+  static final String A1000 = 'A1000';
   static final String A1100 = 'A1100';
   static final String A1200= 'A1200';
-  static final String A130 = 'A130';
-  static final String A230= 'A230';
+  static final String A100 = 'A100';
+  static final String A200= 'A200';
+  static final String A300= 'A300';
+  static final String A400= 'A400';
+  static final String A500= 'A500';
 
-  static List<String> getFields() => [Date, Name, A845, A945, A1100, A1200, A130, A230];
+  static List<String> getFields() => [Date, Name, A900, A1000, A1100, A1200, A100, A200, A300, A400, A500];
 }
 
 class _ActualAttendanceMarkingState extends State<ActualAttendanceMarking> {
@@ -90,7 +93,7 @@ class _ActualAttendanceMarkingState extends State<ActualAttendanceMarking> {
                ),
               ),
               ListTile(
-                title: const Text('8:45 a.m. to 9:45 a.m.'),
+                title: const Text('9:00 a.m. to 10:00 a.m.'),
                 leading: Radio<int>(
                   value: 1,
                   groupValue: selectedOption,
@@ -98,32 +101,16 @@ class _ActualAttendanceMarkingState extends State<ActualAttendanceMarking> {
                   fillColor: MaterialStateProperty.all(Colors.red), // Change the fill color when selected
                   splashRadius: 20, // Change the splash radius when clicked
                   onChanged: (value) {
-                    setState(() async {
+                    setState(() {
                       selectedOption = value!;
                       print(selectedOption);
-                      DateTime currentTime=DateTime.now();
-                      DateTime startTime = DateTime(2023, 11, 2, 19, 44);
-                      DateTime endTime = DateTime(2023, 11, 3, 00, 00);
-                      bool isBeforeTime = currentTime.isBefore(endTime);
-                      bool isAfterTime = currentTime.isAfter(startTime);
-                      if(isBeforeTime==true && isAfterTime==true){
-                        print('Attendance Marked for 8:45 a.m. to 9:45 a.m. lecture!!');
-                        final user = {
-                          UserFields.Date: '${DateTime.now()}',
-                          UserFields.Name: 'Sam Saji',
-                          UserFields.A845: 'P',
-                        };
-                        await UserSheetsApi2.insert([user]);
-                      }
-                      else{
-                        print('Attendance cannot be marked as outside permissible limit!!');
-                      }
+                      MarkAttendance();
                     });
                   },
                 ),
               ),
               ListTile(
-                title: const Text('9:45 a.m. to 10:45 a.m.'),
+                title: const Text('10:00 a.m. to 11:00 a.m.'),
                 leading: Radio<int>(
                   value: 2,
                   groupValue: selectedOption,
@@ -131,26 +118,10 @@ class _ActualAttendanceMarkingState extends State<ActualAttendanceMarking> {
                   fillColor: MaterialStateProperty.all(Colors.blue), // Change the fill color when selected
                   splashRadius: 25, // Change the splash radius when clicked
                   onChanged: (value) {
-                    setState(() async{
+                    setState(() {
                       selectedOption = value!;
                       print(selectedOption);
-                      DateTime currentTime=DateTime.now();
-                      DateTime startTime = DateTime(2023, 11, 2, 19, 44);
-                      DateTime endTime = DateTime(2023, 11, 3, 00, 00);
-                      bool isBeforeTime = currentTime.isBefore(endTime);
-                      bool isAfterTime = currentTime.isAfter(startTime);
-                      if(isBeforeTime==true && isAfterTime==true){
-                        print('Attendance Marked for 9:45 a.m. to 10:45 a.m. lecture!!');
-                        final user = {
-                          UserFields.Date: '${DateTime.now()}',
-                          UserFields.Name: 'Sam Saji',
-                          UserFields.A945: 'P',
-                        };
-                        await UserSheetsApi2.insert([user]);
-                      }
-                      else{
-                        print('Attendance cannot be marked as outside permissible limit!!');
-                      }
+                      MarkAttendance();
                     });
                   },
                 ),
@@ -164,26 +135,10 @@ class _ActualAttendanceMarkingState extends State<ActualAttendanceMarking> {
                   fillColor: MaterialStateProperty.all(Colors.blue), // Change the fill color when selected
                   splashRadius: 25, // Change the splash radius when clicked
                   onChanged: (value) {
-                    setState(() async{
+                    setState(() {
                       selectedOption = value!;
                       print(selectedOption);
-                      DateTime currentTime=DateTime.now();
-                      DateTime startTime = DateTime(2023, 10, 25, 11, 00);
-                      DateTime endTime = DateTime(2023, 10, 25, 12, 00);
-                      bool isBeforeTime = currentTime.isBefore(endTime);
-                      bool isAfterTime = currentTime.isAfter(startTime);
-                      if(isBeforeTime==true && isAfterTime==true){
-                        print('Attendance Marked for 11:00 a.m. to 12:0 p.m. lecture!!');
-                        final user = {
-                          UserFields.Date: '${DateTime.now()}',
-                          UserFields.Name: 'Sam Saji',
-                          UserFields.A1100: 'P',
-                        };
-                        await UserSheetsApi2.insert([user]);
-                      }
-                      else{
-                        print('Attendance cannot be marked as outside permissible limit!!');
-                      }
+                      MarkAttendance();
                     });
                   },
                 ),
@@ -197,32 +152,16 @@ class _ActualAttendanceMarkingState extends State<ActualAttendanceMarking> {
                   fillColor: MaterialStateProperty.all(Colors.blue), // Change the fill color when selected
                   splashRadius: 25, // Change the splash radius when clicked
                   onChanged: (value) {
-                    setState(() async{
+                    setState(() {
                       selectedOption = value!;
                       print(selectedOption);
-                      DateTime currentTime=DateTime.now();
-                      DateTime startTime = DateTime(2023, 10, 25, 12, 00);
-                      DateTime endTime = DateTime(2023, 10, 25, 13, 00);
-                      bool isBeforeTime = currentTime.isBefore(endTime);
-                      bool isAfterTime = currentTime.isAfter(startTime);
-                      if(isBeforeTime==true && isAfterTime==true){
-                        print('Attendance Marked for 12:0 p.m. to 1:00 p.m. lecture!!');
-                        final user = {
-                          UserFields.Date: '${DateTime.now()}',
-                          UserFields.Name: 'Sam Saji',
-                          UserFields.A1200: 'P',
-                        };
-                        await UserSheetsApi2.insert([user]);
-                      }
-                      else{
-                        print('Attendance cannot be marked as outside permissible limit!!');
-                      }
+                      MarkAttendance();
                     });
                   },
                 ),
               ),
               ListTile(
-                title: const Text('1:30 p.m. to 2:30 p.m.'),
+                title: const Text('1:00 p.m. to 2:00 p.m.'),
                 leading: Radio<int>(
                   value: 5,
                   groupValue: selectedOption,
@@ -230,32 +169,16 @@ class _ActualAttendanceMarkingState extends State<ActualAttendanceMarking> {
                   fillColor: MaterialStateProperty.all(Colors.blue), // Change the fill color when selected
                   splashRadius: 25, // Change the splash radius when clicked
                   onChanged: (value) {
-                    setState(() async{
+                    setState(() {
                       selectedOption = value!;
                       print(selectedOption);
-                      DateTime currentTime=DateTime.now();
-                      DateTime startTime = DateTime(2023, 10, 25, 13, 30);
-                      DateTime endTime = DateTime(2023, 10, 25, 14, 30);
-                      bool isBeforeTime = currentTime.isBefore(endTime);
-                      bool isAfterTime = currentTime.isAfter(startTime);
-                      if(isBeforeTime==true && isAfterTime==true){
-                        print('Attendance Marked for 1:30 p.m. to 2:30 p.m. lecture!!');
-                        final user = {
-                          UserFields.Date: '${DateTime.now()}',
-                          UserFields.Name: 'Sam Saji',
-                          UserFields.A130: 'P',
-                        };
-                        await UserSheetsApi2.insert([user]);
-                      }
-                      else{
-                        print('Attendance cannot be marked as outside permissible limit!!');
-                      }
+                      MarkAttendance();
                     });
                   },
                 ),
               ),
               ListTile(
-                title: const Text('2:30 p.m. to 3:30 p.m.'),
+                title: const Text('2:00 p.m. to 3:00 p.m.'),
                 leading: Radio<int>(
                   value: 6,
                   groupValue: selectedOption,
@@ -263,41 +186,295 @@ class _ActualAttendanceMarkingState extends State<ActualAttendanceMarking> {
                   fillColor: MaterialStateProperty.all(Colors.blue), // Change the fill color when selected
                   splashRadius: 25, // Change the splash radius when clicked
                   onChanged: (value) {
-                    setState(() async{
+                    setState(() {
                       selectedOption = value!;
                       print(selectedOption);
-                      DateTime currentTime=DateTime.now();
-                      DateTime startTime = DateTime(2023, 10, 25, 14, 30);
-                      DateTime endTime = DateTime(2023, 10, 25, 15,30);
-                      bool isBeforeTime = currentTime.isBefore(endTime);
-                      bool isAfterTime = currentTime.isAfter(startTime);
-                      if(isBeforeTime==true && isAfterTime==true){
-                        print('Attendance Marked for 2:30 p.m. to 3:30 p.m. lecture!!');
-                        final user = {
-                          UserFields.Date: '${DateTime.now()}',
-                          UserFields.Name: 'Sam Saji',
-                          UserFields.A230: 'P',
-                        };
-                        await UserSheetsApi2.insert([user]);
-                      }
-                      else{
-                        print('Attendance cannot be marked as outside permissible limit!!');
-                      }
+                      MarkAttendance();
                     });
                   },
                 ),
               ),
-              if(selectedOption!=0)
-              ElevatedButton(onPressed: ()async{
-                print("OK!");
-
-
-
-              }, child: Text("Submit Attendance"))
+              ListTile(
+                title: const Text('3:00 p.m. to 4:00 p.m.'),
+                leading: Radio<int>(
+                  value: 7,
+                  groupValue: selectedOption,
+                  activeColor: Colors.blue, // Change the active radio button color here
+                  fillColor: MaterialStateProperty.all(Colors.blue), // Change the fill color when selected
+                  splashRadius: 25, // Change the splash radius when clicked
+                  onChanged: (value) {
+                    setState(() {
+                      selectedOption = value!;
+                      print(selectedOption);
+                      MarkAttendance();
+                    });
+                  },
+                ),
+              ),
+              ListTile(
+                title: const Text('4:00 p.m. to 5:00 p.m.'),
+                leading: Radio<int>(
+                  value: 8,
+                  groupValue: selectedOption,
+                  activeColor: Colors.blue, // Change the active radio button color here
+                  fillColor: MaterialStateProperty.all(Colors.blue), // Change the fill color when selected
+                  splashRadius: 25, // Change the splash radius when clicked
+                  onChanged: (value) {
+                    setState(() {
+                      selectedOption = value!;
+                      print(selectedOption);
+                      MarkAttendance();
+                    });
+                  },
+                ),
+              ),
+              ListTile(
+                title: const Text('5:00 p.m. to 6:00 p.m.'),
+                leading: Radio<int>(
+                  value: 9,
+                  groupValue: selectedOption,
+                  activeColor: Colors.blue, // Change the active radio button color here
+                  fillColor: MaterialStateProperty.all(Colors.blue), // Change the fill color when selected
+                  splashRadius: 25, // Change the splash radius when clicked
+                  onChanged: (value) {
+                    setState(() {
+                      selectedOption = value!;
+                      print(selectedOption);
+                      MarkAttendance();
+                    });
+                  },
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+  Future MarkAttendance() async{
+    if(selectedOption==1){
+      DateTime currentTime=DateTime.now();
+      TimeOfDay startTime = TimeOfDay(hour: 9, minute: 00);
+      TimeOfDay endTime = TimeOfDay(hour: 10, minute: 00);
+      TimeOfDay currentTimeOfDay = TimeOfDay.fromDateTime(currentTime);
+      //bool isBeforeTime = currentTimeOfDay.isBefore(endTime as DateTime);
+      //bool isAfterTime = currentTimeOfDay.isAfter(startTime as DateTime);
+      bool isBeforeTime = currentTimeOfDay.hour >= startTime.hour;
+      bool isAfterTime = currentTimeOfDay.hour < endTime.hour;
+      if(isBeforeTime==true && isAfterTime==true){
+        print('Attendance Marked for 9:00 a.m. to 10:00 a.m. lecture!!');
+        showDialog(context: context, builder: (context)=>
+            AlertDialog(
+              content: Text('Attendance Marked!'),
+              actions: [ElevatedButton(onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomePage()),
+                );
+              }, child: Text('Ok'))],
+            ));
+        final user = {
+          UserFields.Date: '${DateTime.now()}',
+          UserFields.Name: 'Sam Saji',
+          UserFields.A900: 'P',
+        };
+        await UserSheetsApi2.insert([user]);
+      }
+      else{
+        print('Attendance cannot be marked as outside permissible limit!!');
+      }
+    }
+    else if(selectedOption==2){
+      DateTime currentTime=DateTime.now();
+      //DateTime startTime = DateTime(2024, 1, 2, 9, 45);
+      //DateTime endTime = DateTime(2024, 1, 2, 10, 45);
+      TimeOfDay startTime = TimeOfDay(hour: 10, minute: 00);
+      TimeOfDay endTime = TimeOfDay(hour: 11, minute: 00);
+      TimeOfDay currentTimeOfDay = TimeOfDay.fromDateTime(currentTime);
+      //bool isBeforeTime = currentTimeOfDay.isBefore(endTime as DateTime);
+      //bool isAfterTime = currentTimeOfDay.isAfter(startTime as DateTime);
+      bool isBeforeTime = currentTimeOfDay.hour >= startTime.hour;
+      bool isAfterTime = currentTimeOfDay.hour < endTime.hour;
+      if(isBeforeTime==true && isAfterTime==true){
+        print('Attendance Marked for 10:00 a.m. to 11:00 a.m. lecture!!');
+        final user = {
+          UserFields.Date: '${DateTime.now()}',
+          UserFields.Name: 'Sam Saji',
+          UserFields.A1000: 'P',
+        };
+        await UserSheetsApi2.insert([user]);
+      }
+      else{
+        print('Attendance cannot be marked as outside permissible limit!!');
+      }
+    }
+    else if(selectedOption==3){
+      DateTime currentTime=DateTime.now();
+      //DateTime startTime = DateTime(2024, 1, 2, 9, 45);
+      //DateTime endTime = DateTime(2024, 1, 2, 10, 45);
+      TimeOfDay startTime = TimeOfDay(hour: 11, minute: 00);
+      TimeOfDay endTime = TimeOfDay(hour: 12, minute: 00);
+      TimeOfDay currentTimeOfDay = TimeOfDay.fromDateTime(currentTime);
+      //bool isBeforeTime = currentTimeOfDay.isBefore(endTime as DateTime);
+      //bool isAfterTime = currentTimeOfDay.isAfter(startTime as DateTime);
+      bool isBeforeTime = currentTimeOfDay.hour >= startTime.hour;
+      bool isAfterTime = currentTimeOfDay.hour < endTime.hour;
+      if(isBeforeTime==true && isAfterTime==true){
+        print('Attendance Marked for 11:00 a.m. to 12:00 p.m. lecture!!');
+        final user = {
+          UserFields.Date: '${DateTime.now()}',
+          UserFields.Name: 'Sam Saji',
+          UserFields.A1100: 'P',
+        };
+        await UserSheetsApi2.insert([user]);
+      }
+      else{
+        print('Attendance cannot be marked as outside permissible limit!!');
+      }
+    }
+    else if(selectedOption==4){
+      DateTime currentTime=DateTime.now();
+      //DateTime startTime = DateTime(2024, 1, 2, 9, 45);
+      //DateTime endTime = DateTime(2024, 1, 2, 10, 45);
+      TimeOfDay startTime = TimeOfDay(hour: 12, minute: 00);
+      TimeOfDay endTime = TimeOfDay(hour: 13, minute: 00);
+      TimeOfDay currentTimeOfDay = TimeOfDay.fromDateTime(currentTime);
+      //bool isBeforeTime = currentTimeOfDay.isBefore(endTime as DateTime);
+      //bool isAfterTime = currentTimeOfDay.isAfter(startTime as DateTime);
+      bool isBeforeTime = currentTimeOfDay.hour >= startTime.hour;
+      bool isAfterTime = currentTimeOfDay.hour < endTime.hour;
+      if(isBeforeTime==true && isAfterTime==true){
+        print('Attendance Marked for 12:00 p.m. to 1:00 p.m. lecture!!');
+        final user = {
+          UserFields.Date: '${DateTime.now()}',
+          UserFields.Name: 'Sam Saji',
+          UserFields.A1200: 'P',
+        };
+        await UserSheetsApi2.insert([user]);
+      }
+      else{
+        print('Attendance cannot be marked as outside permissible limit!!');
+      }
+    }
+    else if(selectedOption==5){
+      DateTime currentTime=DateTime.now();
+      //DateTime startTime = DateTime(2024, 1, 2, 9, 45);
+      //DateTime endTime = DateTime(2024, 1, 2, 10, 45);
+      TimeOfDay startTime = TimeOfDay(hour: 13, minute: 00);
+      TimeOfDay endTime = TimeOfDay(hour: 14, minute: 00);
+      TimeOfDay currentTimeOfDay = TimeOfDay.fromDateTime(currentTime);
+      //bool isBeforeTime = currentTimeOfDay.isBefore(endTime as DateTime);
+      //bool isAfterTime = currentTimeOfDay.isAfter(startTime as DateTime);
+      bool isBeforeTime = currentTimeOfDay.hour >= startTime.hour;
+      bool isAfterTime = currentTimeOfDay.hour < endTime.hour;
+      if(isBeforeTime==true && isAfterTime==true){
+        print('Attendance Marked for 1:00 p.m. to 2:00 p.m. lecture!!');
+        final user = {
+          UserFields.Date: '${DateTime.now()}',
+          UserFields.Name: 'Sam Saji',
+          UserFields.A100: 'P',
+        };
+        await UserSheetsApi2.insert([user]);
+      }
+      else{
+        print('Attendance cannot be marked as outside permissible limit!!');
+      }
+    }
+    else if(selectedOption==6){
+      DateTime currentTime=DateTime.now();
+      //DateTime startTime = DateTime(2024, 1, 2, 9, 45);
+      //DateTime endTime = DateTime(2024, 1, 2, 10, 45);
+      TimeOfDay startTime = TimeOfDay(hour: 14, minute: 00);
+      TimeOfDay endTime = TimeOfDay(hour: 15, minute: 00);
+      TimeOfDay currentTimeOfDay = TimeOfDay.fromDateTime(currentTime);
+      //bool isBeforeTime = currentTimeOfDay.isBefore(endTime as DateTime);
+      //bool isAfterTime = currentTimeOfDay.isAfter(startTime as DateTime);
+      bool isBeforeTime = currentTimeOfDay.hour >= startTime.hour;
+      bool isAfterTime = currentTimeOfDay.hour < endTime.hour;
+      if(isBeforeTime==true && isAfterTime==true){
+        print('Attendance Marked for 2:00 p.m. to 3:00 p.m. lecture!!');
+        final user = {
+          UserFields.Date: '${DateTime.now()}',
+          UserFields.Name: 'Sam Saji',
+          UserFields.A200: 'P',
+        };
+        await UserSheetsApi2.insert([user]);
+      }
+      else{
+        print('Attendance cannot be marked as outside permissible limit!!');
+      }
+    }
+    else if(selectedOption==7){
+      DateTime currentTime=DateTime.now();
+      //DateTime startTime = DateTime(2024, 1, 2, 9, 45);
+      //DateTime endTime = DateTime(2024, 1, 2, 10, 45);
+      TimeOfDay startTime = TimeOfDay(hour: 15, minute: 00);
+      TimeOfDay endTime = TimeOfDay(hour: 16, minute: 00);
+      TimeOfDay currentTimeOfDay = TimeOfDay.fromDateTime(currentTime);
+      //bool isBeforeTime = currentTimeOfDay.isBefore(endTime as DateTime);
+      //bool isAfterTime = currentTimeOfDay.isAfter(startTime as DateTime);
+      bool isBeforeTime = currentTimeOfDay.hour >= startTime.hour;
+      bool isAfterTime = currentTimeOfDay.hour < endTime.hour;
+      if(isBeforeTime==true && isAfterTime==true){
+        print('Attendance Marked for 3:00 p.m. to 4:00 p.m. lecture!!');
+        final user = {
+          UserFields.Date: '${DateTime.now()}',
+          UserFields.Name: 'Sam Saji',
+          UserFields.A300: 'P',
+        };
+        await UserSheetsApi2.insert([user]);
+      }
+      else{
+        print('Attendance cannot be marked as outside permissible limit!!');
+      }
+    }
+    else if(selectedOption==8){
+      DateTime currentTime=DateTime.now();
+      //DateTime startTime = DateTime(2024, 1, 2, 9, 45);
+      //DateTime endTime = DateTime(2024, 1, 2, 10, 45);
+      TimeOfDay startTime = TimeOfDay(hour: 22, minute: 00);
+      TimeOfDay endTime = TimeOfDay(hour: 24, minute: 00);
+      TimeOfDay currentTimeOfDay = TimeOfDay.fromDateTime(currentTime);
+      //bool isBeforeTime = currentTimeOfDay.isBefore(endTime as DateTime);
+      //bool isAfterTime = currentTimeOfDay.isAfter(startTime as DateTime);
+      bool isBeforeTime = currentTimeOfDay.hour >= startTime.hour;
+      bool isAfterTime = currentTimeOfDay.hour < endTime.hour;
+      if(isBeforeTime==true && isAfterTime==true){
+        print('Attendance Marked for 4:00 p.m. to 5:00 p.m. lecture!!');
+        final user = {
+          UserFields.Date: '${DateTime.now()}',
+          UserFields.Name: 'Sam Saji',
+          UserFields.A400: 'P',
+        };
+        await UserSheetsApi2.insert([user]);
+      }
+      else{
+        print('Attendance cannot be marked as outside permissible limit!!');
+      }
+    }
+    else if(selectedOption==9){
+      DateTime currentTime=DateTime.now();
+      //DateTime startTime = DateTime(2024, 1, 2, 9, 45);
+      //DateTime endTime = DateTime(2024, 1, 2, 10, 45);
+      TimeOfDay startTime = TimeOfDay(hour: 17, minute: 00);
+      TimeOfDay endTime = TimeOfDay(hour: 18, minute: 00);
+      TimeOfDay currentTimeOfDay = TimeOfDay.fromDateTime(currentTime);
+      //bool isBeforeTime = currentTimeOfDay.isBefore(endTime as DateTime);
+      //bool isAfterTime = currentTimeOfDay.isAfter(startTime as DateTime);
+      bool isBeforeTime = currentTimeOfDay.hour >= startTime.hour;
+      bool isAfterTime = currentTimeOfDay.hour < endTime.hour;
+      if(isBeforeTime==true && isAfterTime==true){
+        print('Attendance Marked for 5:00 p.m. to 6:00 p.m. lecture!!');
+        final user = {
+          UserFields.Date: '${DateTime.now()}',
+          UserFields.Name: 'Sam Saji',
+          UserFields.A500: 'P',
+        };
+        await UserSheetsApi2.insert([user]);
+      }
+      else{
+        print('Attendance cannot be marked as outside permissible limit!!');
+      }
+    }
   }
 }
