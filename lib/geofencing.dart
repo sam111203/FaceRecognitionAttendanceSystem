@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart' as geoc;
-import 'dart:async';
-import 'package:flutter/services.dart';
-import 'package:miniprojectsem5/HomeScreenRecognize.dart';
-void main()
-{
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(const GeolocationApp());
-}
+import 'HomeScreenRecognize.dart';
+import 'changeGeofence.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GeolocationApp extends StatefulWidget {
-  const GeolocationApp({super.key});
+
+  const GeolocationApp({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<GeolocationApp> createState() => _GeolocationAppState();
@@ -23,22 +20,24 @@ class _GeolocationAppState extends State<GeolocationApp> {
   late LocationPermission permission;
   var time;
 
-  double startLatitude = 19.0450936;//for xie
-  double startLongitude = 72.8419759;//for xie
+  double startLatitude = double.parse(startlatitude); // Initialize with default value
+  double startLongitude = double.parse(startlongitude); // Initialize with default value
   double? distanceInMeter = 0.0;
-  Future<Position> _getCurrentLocation() async{
+
+  @override
+  Future<Position> _getCurrentLocation() async {
     servicePermission = await Geolocator.isLocationServiceEnabled();
-    if(!servicePermission) {
+    if (!servicePermission) {
       print("Service Disabled");
     }
     permission = await Geolocator.checkPermission();
-    if(permission == LocationPermission.denied){
+    if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
     }
 
     return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -53,34 +52,37 @@ class _GeolocationAppState extends State<GeolocationApp> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("Location Coordinates",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24),),
-              SizedBox(
-                height: 6,
-              ),
+              Text("Location Coordinates", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
+              SizedBox(height: 6),
               Text("Latitude= ${_currentLocation?.latitude} , Longitude= ${_currentLocation?.longitude}"),
-              Text("as of ${time}", style: TextStyle(fontWeight: FontWeight.bold),),
-              SizedBox(
-                height: 30.0,
-              ),
-              ElevatedButton(onPressed: ()async{
-                _currentLocation = await _getCurrentLocation();
-                distanceInMeter = await Geolocator.distanceBetween(startLatitude, startLongitude,  _currentLocation!.latitude, _currentLocation!.longitude);
-                print(distanceInMeter);
-                if(distanceInMeter!<=100){
-                  print("You are inside the radius");
-                 Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomeScreenRecognize()),
+              Text("as of ${time}", style: TextStyle(fontWeight: FontWeight.bold)),
+              SizedBox(height: 30),
+              ElevatedButton(
+                onPressed: () async {
+                  _currentLocation = await _getCurrentLocation();
+                  distanceInMeter = await Geolocator.distanceBetween(
+                    startLatitude,
+                    startLongitude,
+                    _currentLocation!.latitude,
+                    _currentLocation!.longitude,
                   );
-                }
-                else{
-                  print("You are outside the prescribed radius");
-                }
-                setState((){
-                  time = DateTime.now();
-                });
-                print("${_currentLocation}");
-              }, child: Text("Get Current Location"),),
+                  print(distanceInMeter);
+                  if (distanceInMeter! <= 100) {
+                    print("You are inside the radius");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HomeScreenRecognize()),
+                    );
+                  } else {
+                    print("You are outside the prescribed radius");
+                  }
+                  setState(() {
+                    time = DateTime.now();
+                  });
+                  print("${_currentLocation}");
+                },
+                child: Text("Get Current Location"),
+              ),
             ],
           ),
         ),

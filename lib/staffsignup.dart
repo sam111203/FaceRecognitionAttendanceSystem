@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'login.dart';
+import 'stafflogin.dart';
 import 'package:gsheets/gsheets.dart';
-
-class UserSheetsApi1{
+var usernames;
+class UserSheetsApi4{
   static const _credentials = r''' 
   {
   "type": "service_account",
@@ -43,12 +43,21 @@ class UserSheetsApi1{
       return spreadsheet.worksheetByTitle(title)!;
     }
   }
+
   static Future insert(List<Map<String, dynamic>> rowList) async {
     if (_userSheet1 == null) return;
-
-    _userSheet1!.values.map.appendRows(rowList);
+    usernames = await _userSheet1?.values.columnByKey('Username');
+    final CurrentUserName = fiveController.text;
+    if (usernames!.contains(CurrentUserName)) {
+      print("Duplicate Entries!");
+    }
+    else {
+      print("No repeated Entry!!.");
+      _userSheet1!.values.map.appendRows(rowList);
+      print("Insertion Successful!!");
     }
   }
+}
 
 
 class UserFields{
@@ -165,25 +174,40 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue, // Background color
                     ),
-                    onPressed: () async{
+                    onPressed: () async {
                       String Gsuite = fiveController.text;
-                      // if(Gsuite.contains('@student.xavier.ac.in')) {
-                      final user = {
-                        UserFields.FName: oneController.text,
-                        UserFields.MName: twoController.text,
-                        UserFields.LName: threeController.text,
-                        UserFields.GSUITE: fiveController.text,
-                        UserFields.Passkey: passwordController.text,
+                      if (Gsuite.contains('@staff.bham.ac.uk')) {
+                        final user = {
+                          UserFields.FName: oneController.text,
+                          UserFields.MName: twoController.text,
+                          UserFields.LName: threeController.text,
+                          UserFields.GSUITE: fiveController.text,
+                          UserFields.Passkey: passwordController.text,
 
-                      };
+                        };
 
-                      await UserSheetsApi1.insert([user]);
-                      print(oneController.text);
-                      print(twoController.text);
-                      print(threeController.text);
-                      print(fiveController.text);
-                      print(passwordController.text);
+                        await UserSheetsApi4.insert([user]);
+                        print(oneController.text);
+                        print(twoController.text);
+                        print(threeController.text);
+                        print(fiveController.text);
+                        print(passwordController.text);
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => StaffLogin()));
+                      }
+                      else{
+                        showDialog(context: context, builder: (context)=>AlertDialog(
+                          title: Text("Enter Valid Staff Email ID"),
+                          content: ElevatedButton(
+                            child: Text("Ok!"),
+                            onPressed: (){
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ));
+                      }
                     }
+
                 )
             ),
             Row(
@@ -198,7 +222,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                     child: Text('LOGIN',style: TextStyle(fontWeight: FontWeight.w900,color: Colors.blue),),
                     onTap: (){
 
-                      Navigator.push(context,MaterialPageRoute(builder: (context) =>Login()));
+                      Navigator.push(context,MaterialPageRoute(builder: (context) =>StaffLogin()));
                     },
 
                   ),
@@ -213,4 +237,3 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         ));
   }
 }
-

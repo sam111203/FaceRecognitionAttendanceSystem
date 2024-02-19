@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/icon/Homepage Wallpaper (1).png"),
+                image: AssetImage("assets/icon/Homepage Wallpaper (1).png"), //
                 fit: BoxFit.cover,
               ),
             ),
@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
                   onPressed: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const GeolocationApp()),
+                      MaterialPageRoute(builder: (context) => GeolocationApp()), //Check this out!!
                     );
                   }, child: Text('Mark Attendance')
               ),

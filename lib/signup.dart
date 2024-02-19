@@ -52,7 +52,7 @@ class UserSheetsApi1{
 
     var rollNumbers = await _userSheet1?.values.columnByKey('Roll No');
     final current_rollNo = fourController.text;
-    print(current_rollNo);
+    //print(current_rollNo);
     if (rollNumbers!.contains(current_rollNo)) {
       print("Duplicate Entries!");
     }
@@ -191,9 +191,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue, // Background color
                   ),
-                  onPressed: () async{
-                   String Gsuite = fiveController.text;
-                   // if(Gsuite.contains('@student.xavier.ac.in')) {
+                  onPressed: () async {
+                    String Gsuite = fiveController.text;
+                    if (Gsuite.contains('@gmail.com')) {
                       final user = {
                         UserFields.FName: oneController.text,
                         UserFields.MName: twoController.text,
@@ -202,10 +202,11 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                         UserFields.GSUITE: fiveController.text,
                         UserFields.Passkey: passwordController.text,
 
-                     };
+                      };
 
                       await UserSheetsApi1.insert([user]);
-                      Navigator.push(context,MaterialPageRoute(builder: (context) =>Login()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Login()));
                       print(oneController.text);
                       print(twoController.text);
                       print(threeController.text);
@@ -213,6 +214,19 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                       print(fiveController.text);
                       print(passwordController.text);
                     }
+                    else{
+                      showDialog(context: context, builder: (context)=>AlertDialog(
+                        title: Text('Please enter a valid email id'),
+                        content: ElevatedButton(
+                          child: Text("Ok!"),
+                          onPressed: (){
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ));
+                    }
+                  }
+
                 )
             ),
             Row(

@@ -207,6 +207,7 @@ class _ActualAttendanceMarkingState extends State<ActualAttendanceMarking> {
                       selectedOption = value!;
                       print(selectedOption);
                       MarkAttendance();
+
                     });
                   },
                 ),

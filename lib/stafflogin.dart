@@ -1,8 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gsheets/gsheets.dart';
 import 'StaffHomepage.dart';
 import 'staffsignup.dart';
-
 void main() => runApp(const StaffSignup());
 
 class StaffLogin extends StatelessWidget {
@@ -24,7 +24,7 @@ class MyStatefulWidget extends StatefulWidget {
   @override
   State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
 }
-class UserSheetsApi{
+class UserSheetsApi3{
   static const _credentials = r''' 
   {
   "type": "service_account",
@@ -65,6 +65,7 @@ class UserSheetsApi{
       return spreadsheet.worksheetByTitle(title)!;
     }
   }
+
   static Future insert(List<Map<String, dynamic>> rowList) async{
     if(_userSheet == null) return;
 
@@ -72,17 +73,15 @@ class UserSheetsApi{
   }
 
 }
-
+String staffid = "";
 class UserFields{
   static final String GSUITE_ID = 'Username';
   static final String Password = 'Password';
   static final String LoginTimeStamp = 'LoginTimeStamp';
   static List<String> getFields() => [GSUITE_ID,Password,LoginTimeStamp];
 }
-
+TextEditingController nameController = TextEditingController();
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-
-  TextEditingController nameController = TextEditingController();
   bool _validate_name = false;
   TextEditingController passwordController = TextEditingController();
   bool _validate_password = false;
@@ -90,138 +89,154 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(10),
-        child: ListView(
-          children: <Widget>[
-            Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.only(top: 100,bottom: 20),
-                child: const Text(
-                  'WELCOME!',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 30),
-                )),
-            Icon(
-              Icons.person_outline,
-              color: Colors.blue,
-              size: 70.0,
-            ),
-            Form(
-              child: Column(
-                children: <Widget>[Container(
-                  padding: const EdgeInsets.only(top:20, left:10, right: 10),
+      padding: const EdgeInsets.all(10),
+      child: ListView(
+        children: <Widget>[
+          Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.only(top: 100, bottom: 20),
+              child: const Text(
+                'WELCOME!',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 30),
+              )),
+          Icon(
+            Icons.person_outline,
+            color: Colors.blue,
+            size: 70.0,
+          ),
+          Form(
+            child: Column(
+              children: <Widget>[Container(
+                padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
+                child: TextFormField(
+                  maxLength: 45,
+                  controller: nameController,
+                  style: TextStyle(height: 2.0),
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                      BorderSide(width: 3, color: Colors.black), //<-- SEE HERE
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    labelText: 'Enter Username',
+                    errorText: _validate_name
+                        ? "Please Enter your Username"
+                        : null,
+                  ),
+
+                ),
+              ),
+                Container(
+                  padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
                   child: TextFormField(
-                    maxLength: 45,
-                    controller: nameController,
+                    obscureText: true,
                     style: TextStyle(height: 2.0),
+                    controller: passwordController,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide:
-                        BorderSide(width: 3, color: Colors.black), //<-- SEE HERE
+                        BorderSide(width: 3, color: Colors.black),
+                        //<-- SEE HERE
                         borderRadius: BorderRadius.circular(15.0),
                       ),
-                      labelText: 'Enter Username',
-                      errorText: _validate_name ? "Please Enter your Username" : null,
+                      labelText: 'Enter Password',
+                      errorText: _validate_password
+                          ? "Please Enter a Password"
+                          : null,
                     ),
 
                   ),
-                ),
-                  Container(
-                    padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
-                    child: TextFormField(
-                      obscureText: true,
-                      style: TextStyle(height: 2.0),
-                      controller: passwordController,
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                          BorderSide(width: 3, color: Colors.black), //<-- SEE HERE
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        labelText: 'Enter Password',
-                        errorText: _validate_password ? "Please Enter a Password" : null,
-                      ),
-
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            Container(
-                height: 100,
-                padding: const EdgeInsets.only(top: 30, left: 110, right: 110),
-                child: ElevatedButton(
-                    child: const Text('Login',style: TextStyle(fontSize: 25),),
-                    style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50.0),
-                            )
-                        )
-                    ),
-
-                    onPressed: () async{
-                      //final _spreadsheetId = '1OwiWJJ9PR-18gCIPn30XVWdBzPoRg7Chjetn7mfqtvs';
-                      //final range = 'Sheet1!A:A';
-                      final user = {
-                        UserFields.GSUITE_ID: nameController.text,
-                        UserFields.Password: passwordController.text,
-                        UserFields.LoginTimeStamp: '${DateTime.now()}',
-                      };
-                      await UserSheetsApi.insert([user]);
-
-                      print(nameController.text);
-                      print(passwordController.text);
-                      print(DateTime.now());
-
-                      setState(() {
-                        nameController.text.isEmpty ? _validate_name = true : _validate_name = false;
-                        passwordController.text.isEmpty ? _validate_password = true : _validate_password = false;
-
-
-                      });
-                      if(_validate_name!=true && _validate_password!=true){
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const StaffHomePage()),
-                        );
-                      }
-
-                    }
-                )
-            ),
-            //Checkbox to be inserted here inside row element
-            // TextButton(
-            // onPressed: () {
-            //forgot password screen
-            //},
-            //child: const Text('Keep me Signed In',style: TextStyle(fontSize: 15),),
-            //),
-
-                Row(
-                  children: <Widget>[
-                    const Text('New Staff?',style: TextStyle(fontSize: 15,),),
-                    TextButton(
-                      child: const Text(
-                        'Sign up',
-                        style: TextStyle(fontSize: 15,decoration: TextDecoration.underline,),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const StaffSignup()),
-                        );
-
-                      },
-                    )
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.center,
                 ),
               ],
             ),
-        );
+          ),
+
+          Container(
+              height: 100,
+              padding: const EdgeInsets.only(top: 30, left: 110, right: 110),
+              child: ElevatedButton(
+                  child: const Text('Login', style: TextStyle(fontSize: 25),),
+                  style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50.0),
+                          )
+                      )
+                  ),
+
+                  onPressed: () async {
+                    //final _spreadsheetId = '1OwiWJJ9PR-18gCIPn30XVWdBzPoRg7Chjetn7mfqtvs';
+                    //final range = 'Sheet1!A:A';
+                    final user = {
+                      UserFields.GSUITE_ID: nameController.text,
+                      UserFields.Password: passwordController.text,
+                      UserFields.LoginTimeStamp: '${DateTime.now()}',
+                    };
+
+
+                    print(nameController.text);
+                    print(passwordController.text);
+                    print(DateTime.now());
+
+                    setState(() {
+                      nameController.text.isEmpty
+                          ? _validate_name = true
+                          : _validate_name = false;
+                      passwordController.text.isEmpty ?
+                      _validate_password = true : _validate_password = false;
+                    });
+                    staffid = nameController.text;
+                    if (staffid.contains('@staff.bham.ac.uk')) {
+                      await UserSheetsApi3.insert([user]);
+                      if (_validate_name != true &&
+                          _validate_password != true) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const StaffHomePage()),
+                        );
+                      }
+                    }
+                    else {
+                      showDialog(context: context, builder: (context) =>
+                          AlertDialog(
+                            title: Text("Check staff id and password"),
+                            content: ElevatedButton(
+                              child: Text("Ok!"),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ));
+                    }
+                  }
+              )
+          ),
+          Row(
+            children: <Widget>[
+              const Text('New Staff?', style: TextStyle(fontSize: 15,),),
+              TextButton(
+                child: const Text(
+                  'Sign up',
+                  style: TextStyle(fontSize: 15,
+                    decoration: TextDecoration.underline,),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const StaffSignup()),
+                  );
+                },
+              )
+            ],
+            mainAxisAlignment: MainAxisAlignment.center,
+          ),
+        ],
+      ),
+    );
   }
 }

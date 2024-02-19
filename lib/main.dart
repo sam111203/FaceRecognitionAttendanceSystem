@@ -4,6 +4,8 @@ import 'signup.dart';
 import 'MarkAttendaceForLectures.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:camera/camera.dart';
+import 'stafflogin.dart';
+import 'staffsignup.dart';
 late List<CameraDescription> cameras;
 Future main() async
 {
@@ -11,6 +13,9 @@ Future main() async
  await UserSheetsApi.init();
  await UserSheetsApi1.init();
  await UserSheetsApi2.init();
+ await UserSheetsApi3.init();
+ await UserSheetsApi4.init();
+ await UserSheetsApi5.init();
  cameras = await availableCameras();
  // Initialize the Firebase app with the options.
  final FirebaseOptions options = FirebaseOptions(
